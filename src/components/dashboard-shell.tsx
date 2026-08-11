@@ -1,6 +1,5 @@
-import { BriefcaseBusiness, LogOut } from "lucide-react";
-import { logout } from "@/app/auth/actions";
-import { Button } from "@/components/ui/button";
+import { BriefcaseBusiness } from "lucide-react";
+import { AppShell } from "@/components/app-shell";
 import type { Profile } from "@/lib/auth/types";
 
 const copy = {
@@ -12,13 +11,7 @@ const copy = {
 export function DashboardShell({ profile }: { profile: Profile }) {
   const content = copy[profile.role];
   return (
-    <main className="min-h-screen">
-      <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-          <div className="flex items-center gap-2 font-semibold"><span className="flex size-8 items-center justify-center rounded-lg bg-slate-900 text-white"><BriefcaseBusiness size={16} /></span>MeetMarket</div>
-          <div className="flex items-center gap-4"><div className="hidden text-right sm:block"><p className="text-sm font-medium">{profile.display_name}</p><p className="text-xs text-slate-500">{profile.email}</p></div><form action={logout}><Button type="submit" size="sm" variant="outline"><LogOut size={15} /> Выйти</Button></form></div>
-        </div>
-      </header>
+    <AppShell profile={profile}>
       <div className="mx-auto max-w-6xl px-5 py-12">
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">{content.eyebrow}</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight">{content.title}, {profile.display_name}</h1>
@@ -29,6 +22,6 @@ export function DashboardShell({ profile }: { profile: Profile }) {
           <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">Технический фундамент готов. Marketplace-функции намеренно не входят в Sprint 0.</p>
         </section>
       </div>
-    </main>
+    </AppShell>
   );
 }

@@ -75,3 +75,25 @@ npm run build
 ```
 
 Product documents live in [`docs/`](docs/).
+
+## Sprint 1 database setup
+
+After the Sprint 0 migration has been applied, run the following file once in Supabase **SQL Editor**:
+
+```text
+supabase/migrations/20260811010000_sprint_1_bounty_marketplace.sql
+```
+
+It adds only the Sprint 1 business and bounty marketplace tables, immutable bounty versions, RLS policies and authenticated RPC functions. It does not add prospects, meetings or financial tables.
+
+For databases where the initial Sprint 1 migration was already applied, also run:
+
+```text
+supabase/migrations/20260811011000_fix_bounty_historical_access.sql
+```
+
+This lifecycle patch preserves private brief access for an existing SDR taker after a bounty becomes `PAUSED`, `COMPLETED` or `ARCHIVED`; it does not change tables or RLS policies.
+
+### Optional development data
+
+`supabase/seed.sql` is separate and optional. It requires at least one `ACTIVE` `ADMIN` profile and inserts five fictional verified businesses and five active bounties. Run it once after the Sprint 1 migration. Do not run it on production unless you explicitly want demo records.
