@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+:root { color-scheme: light; }
+* { border-color: rgb(226 232 240); }
+body { background: #f8fafc; color: #0f172a; }
+button, a { -webkit-tap-highlight-color: transparent; }
