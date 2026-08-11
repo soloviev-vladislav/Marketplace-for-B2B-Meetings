@@ -4,6 +4,7 @@ import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth/session";
+import { serializeActiveUntil } from "@/lib/marketplace/bounty-payload";
 import { createClient } from "@/lib/supabase/server";
 import { businessSchema, bountySchema } from "@/lib/validations/marketplace";
 
@@ -84,6 +85,7 @@ export async function saveBounty(
       "platform_fee_rubles",
       "meeting_limit",
       "active_until",
+      "original_active_until",
       "geography",
       "industries",
       "excluded_industries",
@@ -149,9 +151,10 @@ export async function saveBounty(
     slug,
     reward_amount: parsed.data.reward_rubles,
     platform_fee_amount: parsed.data.platform_fee_rubles,
-    active_until: new Date(
-      `${parsed.data.active_until}T23:59:59`,
-    ).toISOString(),
+    active_until: serializeActiveUntil(
+      parsed.data.active_until,
+      String(formData.get("original_active_until") ?? "") || undefined,
+    ),
     max_revenue: parsed.data.max_revenue === "" ? "" : parsed.data.max_revenue,
     min_employees:
       parsed.data.min_employees === "" ? "" : parsed.data.min_employees,

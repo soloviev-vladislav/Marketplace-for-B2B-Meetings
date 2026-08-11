@@ -94,6 +94,15 @@ supabase/migrations/20260811011000_fix_bounty_historical_access.sql
 
 This lifecycle patch preserves private brief access for an existing SDR taker after a bounty becomes `PAUSED`, `COMPLETED` or `ARCHIVED`; it does not change tables or RLS policies.
 
+For Sprint 2 prospect registration and ownership, apply next:
+
+```text
+supabase/migrations/20260811012000_stabilize_sprint_1_marketplace.sql
+supabase/migrations/20260811020000_sprint_2_prospect_registration.sql
+```
+
+The Sprint 2 migration adds `prospects`, company identity normalization, concurrency-safe ownership, admin review RPCs and RLS. It does not add meetings or payment entities.
+
 ### Optional development data
 
 `supabase/seed.sql` is separate and optional. It requires at least one `ACTIVE` `ADMIN` profile and inserts five fictional verified businesses and five active bounties. Run it once after the Sprint 1 migration. Do not run it on production unless you explicitly want demo records.

@@ -5,12 +5,13 @@ import { Button } from "@/components/ui/button";
 import type { Profile } from "@/lib/auth/types";
 
 const navigation = {
-  SDR: [{ href: "/bounties", label: "Marketplace" }, { href: "/sdr/workspace", label: "Мои bounty" }],
+  SDR: [{ href: "/bounties", label: "Marketplace" }, { href: "/sdr/workspace", label: "Мои bounty" }, { href: "/sdr/prospects", label: "Мои prospects" }],
   BUSINESS: [{ href: "/business/dashboard", label: "Dashboard" }],
   ADMIN: [
     { href: "/admin/dashboard", label: "Dashboard" },
     { href: "/admin/businesses", label: "Businesses" },
     { href: "/admin/bounties", label: "Bounties" },
+    { href: "/admin/prospects", label: "Prospects" },
     { href: "/bounties", label: "Marketplace" },
   ],
 } as const;

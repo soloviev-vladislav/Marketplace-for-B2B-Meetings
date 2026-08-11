@@ -51,6 +51,7 @@ export function BountyForm({
         <>
           <input type="hidden" name="id" value={bounty.id} />
           <input type="hidden" name="slug" value={text(bounty.slug)} />
+          <input type="hidden" name="original_active_until" value={text(bounty.active_until)} />
         </>
       )}
       <Section

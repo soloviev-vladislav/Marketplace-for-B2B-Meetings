@@ -7,12 +7,21 @@ import { formatDate, formatMoney } from "@/lib/marketplace/format";
 import { requireRole } from "@/lib/auth/session";
 import { createClient } from "@/lib/supabase/server";
 import type { WorkspaceBounty } from "@/lib/marketplace/types";
+import type { SdrProspect } from "@/lib/prospects/types";
 
 export default async function WorkspacePage() {
   const profile = await requireRole("SDR");
   const supabase = await createClient();
-  const { data } = await supabase.rpc("sdr_workspace");
+  const [{ data }, { data: prospectData }] = await Promise.all([
+    supabase.rpc("sdr_workspace"),
+    supabase.rpc("sdr_prospects"),
+  ]);
   const bounties = (data ?? []) as WorkspaceBounty[];
+  const prospects = (prospectData ?? []) as SdrProspect[];
+  const prospectCounts = prospects.reduce<Record<string, number>>((counts, prospect) => {
+    counts[prospect.bounty_id] = (counts[prospect.bounty_id] ?? 0) + 1;
+    return counts;
+  }, {});
   return (
     <AppShell profile={profile}>
       <div className="mx-auto max-w-6xl px-5 py-10">
@@ -73,16 +82,18 @@ export default async function WorkspacePage() {
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t pt-4">
                   <div className="flex gap-5 text-xs text-slate-500">
                     <span>Взят {formatDate(bounty.taken_at)}</span>
-                    <span>Prospects: 0</span>
+                    <span>Prospects: {prospectCounts[bounty.id] ?? 0}</span>
                     <span>Meetings: 0</span>
                     <span>Earnings: 0 ₽</span>
                   </div>
-                  <Link
-                    href={`/bounties/${bounty.slug}`}
-                    className="text-sm font-semibold"
-                  >
-                    Открыть brief →
-                  </Link>
+                  <div className="flex flex-wrap items-center gap-3">
+                    {bounty.status === "ACTIVE" && !bounty.is_expired && (
+                      <Button asChild size="sm">
+                        <Link href={`/sdr/prospects/new?bountyId=${bounty.id}`}>Добавить prospect</Link>
+                      </Button>
+                    )}
+                    <Link href={`/bounties/${bounty.slug}`} className="text-sm font-semibold">Открыть brief →</Link>
+                  </div>
                 </div>
               </article>
             ))}
